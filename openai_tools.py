@@ -21,14 +21,19 @@ def check_openai_api_key(client):
         logger.success("API key validated successfully")
 
 
-def get_embedding(abstracts, model="text-embedding-3-small"):
+def create_openai_client():
     load_dotenv()
     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    return client
+
+
+def get_embedding(abstracts, model="text-embedding-3-small"):
+    client = create_openai_client()
     check_openai_api_key(client)
 
     embeddings = {}
     for abstract in abstracts:
-        if len(abstract) > 20: 
+        if len(abstract) > 20:
             logger.info(f"Generating embeddings for '{abstract[:20]} ...'")
         else:
             logger.info(f"Generating embeddings for {abstract}")
