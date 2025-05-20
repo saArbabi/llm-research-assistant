@@ -1,0 +1,7 @@
+initial_play/
+.env
+*.pkl
+*.index
+*.jsonl
+notebook.ipynb
+__pycache__
