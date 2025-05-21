@@ -5,7 +5,7 @@ import faiss
 import numpy as np
 from loguru import logger
 
-from openai_tools import get_embedding
+from src.openai_tools import get_embedding
 
 logger.remove()
 logger.add(

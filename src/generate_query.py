@@ -1,4 +1,4 @@
-from openai_tools import create_openai_client
+from src.openai_tools import create_openai_client
 
 
 def generate_search_query(user_description: str, model: str = "gpt-3.5-turbo") -> str:

@@ -2,7 +2,7 @@ import pickle
 
 import faiss
 
-from openai_tools import get_embedding
+from src.openai_tools import get_embedding
 
 EMBEDDING_MODEL = "text-embedding-3-small"
 DIMENSION = 1536
