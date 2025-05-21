@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from src.openai_tools import create_openai_client, parse_llm_response
+from openai_tools import create_openai_client, parse_llm_response
 
 
 def generate_search_query(user_description: str, model: str = "gpt-3.5-turbo") -> str:
@@ -37,8 +37,23 @@ def generate_search_query(user_description: str, model: str = "gpt-3.5-turbo") -
             },
         ],
     )
-    search_query = response.choices[0].message.content
+    search_query = response.choices[0].message.content.strip()
     return parse_llm_response(search_query, QueryResponse())
+
+
+def mock_search_query():
+    # Sample LLM response
+    dummy_response_text = """
+    Sure! Here's the JSON you requested:
+
+    {
+        "queries": ["How do plants photosynthesize?", "What is the role of chlorophyll?", "Why is sunlight important for plants?"],
+        "thoughts": "These queries explore the essential elements of plant biology related to photosynthesis."
+    }
+    """
+    # Assuming you have the `parse_llm_response` function and QueryResponse model defined
+
+    return parse_llm_response(dummy_response_text, QueryResponse)
 
 
 class QueryResponse(BaseModel):
