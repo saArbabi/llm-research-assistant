@@ -25,11 +25,3 @@ def save_papers_to_jsonl(papers, filename="papers.jsonl"):
         for paper in papers:
             f.write(json.dumps(paper, ensure_ascii=False) + "\n")
     print(f"Saved {len(papers)} papers to '{filename}'.")
-
-
-if __name__ == "__main__":
-    # query = input("Enter your search query: ")
-    query = "pomdp for robotics"
-    # papers = search_semantic_scholar(query)
-    # save_papers_to_jsonl(papers)
-save_papers_to_jsonl(paper)
