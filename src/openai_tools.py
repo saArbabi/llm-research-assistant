@@ -1,3 +1,4 @@
+import json
 import os
 
 import numpy as np
@@ -5,6 +6,7 @@ import openai
 from dotenv import load_dotenv
 from loguru import logger
 from openai import OpenAI
+from pydantic import BaseModel, ValidationError
 
 logger.remove()
 logger.add(
@@ -41,3 +43,30 @@ def get_embedding(abstracts, model="text-embedding-3-small"):
         embeddings[abstract] = np.array(response.data[0].embedding)
     logger.success("Embeddings generated")
     return embeddings
+
+
+def parse_llm_response(response_text: str, model: BaseModel) -> BaseModel:
+    """
+    Extracts JSON from an LLM response and validates it against a Pydantic model.
+
+    Args:
+        response_text (str): Raw response from the LLM, expected to contain JSON.
+        model (BaseModel): A Pydantic model class to validate against.
+
+    Returns:
+        An instance of the Pydantic model with validated data.
+
+    Raises:
+        ValueError: If JSON extraction or validation fails.
+    """
+    try:
+        # Attempt to find the first JSON object in the response
+        start = response_text.find("{")
+        end = response_text.rfind("}") + 1
+        json_str = response_text[start:end]
+
+        data = json.loads(json_str)
+        return model.model_validate(data)
+
+    except (json.JSONDecodeError, ValidationError) as e:
+        raise ValueError(f"Failed to parse or validate LLM response: {e}")

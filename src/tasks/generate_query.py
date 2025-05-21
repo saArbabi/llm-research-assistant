@@ -1,4 +1,6 @@
-from src.openai_tools import create_openai_client
+from pydantic import BaseModel
+
+from src.openai_tools import create_openai_client, parse_llm_response
 
 
 def generate_search_query(user_description: str, model: str = "gpt-3.5-turbo") -> str:
@@ -16,19 +18,32 @@ def generate_search_query(user_description: str, model: str = "gpt-3.5-turbo") -
         "Make sure to provide both your thought process and the generated queries"
     )
 
-
     client = create_openai_client()
 
     response = client.chat.completions.create(
         model=model,
         messages=[
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_description},
+            {
+                "role": "user",
+                "content": f"""Return JSON in this format:
+        {{
+        "queries": ["query1", "query2", "query3"],
+        "thoughts": "Your explanation here"
+        }}
+
+        Now, {user_description}
+        """,
+            },
         ],
-        max_tokens=30,
     )
-    search_query = response.choices[0].message.content.strip()
-    return search_query
+    search_query = response.choices[0].message.content
+    return parse_llm_response(search_query, QueryResponse())
+
+
+class QueryResponse(BaseModel):
+    queries: list[str]
+    thoughts: str
 
 
 if __name__ == "__main__":
