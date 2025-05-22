@@ -4,3 +4,4 @@ loguru
 rich
 faiss-cpu
 pydantic
+requests
