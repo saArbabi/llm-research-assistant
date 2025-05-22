@@ -1,7 +1,3 @@
-# 🧠 LLM Research Idea Generator
-
-This is a pipeline that chains together a bunch of LLM calls to help generate and assess new research ideas. It's basically a thinking assistant that does the grunt work of literature review and idea vetting. Here's how it works:
-
 ## Features
 
 - **Query Generation**: Automatically formulates relevant search queries from your problem statement.
@@ -62,3 +58,12 @@ Current image generation models often struggle with accurately generating hands.
 ```
 
 The assistant will respond with relevant research directions, novelty checks, and experiment suggestions.
+
+## Future improvements
+1. **Improve literature retrieval**  
+   Currently, the package retrieves information from paper abstracts. A more advanced approach would involve implementing a RAG to extract richer, context-aware information directly from full-text literature.
+
+2. **LLM function calling and agentic behavior**  
+   Introduce more dynamic agent capabilities using LLM function calling, such as:
+   - Autonomous re-searching until a specified compute or token budget is met.
+   - Retrospective analysis where the agent reviews its own trace, identifies gaps in retrieved knowledge, and generates additional, targeted queries to address those gaps.
