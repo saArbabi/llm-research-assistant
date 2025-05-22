@@ -4,4 +4,5 @@ MOCK_BEHAVIOR = {
     "perform_literature_search": True,
     "search": True,
     "generate_search_ideas": True,
+    "generate_report": False,
 }

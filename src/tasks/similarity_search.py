@@ -75,13 +75,17 @@ def mock_search(query, llm_search_results, top_k=3):
     distances, indices = faiss_index.search(query_embedding[query].reshape(1, -1), top_k)
     results = []
     for i, idx in enumerate(indices[0]):
-        abstract = f"{abstracts[idx]} ..."
+        title = f"{llm_search_results[idx]['title']}"
+        abstract = f"{llm_search_results[idx]['abstract']}"
+        link = f"{llm_search_results[idx]['url']}"
         distance = f"{distances[0][i]:.4f}"
-        results.append(SimilarityResult(abstract, distance))
+        results.append(SimilarityResult(title, abstract, link, distance))
     return results
 
 
 @dataclass
 class SimilarityResult:
+    title: str
     abstract: str
+    url: str
     distance: str

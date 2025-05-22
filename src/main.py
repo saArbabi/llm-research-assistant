@@ -33,7 +33,7 @@ async def main() -> None:
         return
 
     llm_agent = Agent(query)
-    ans = await llm_agent.run()
+    await llm_agent.run()
 
 
 if __name__ == "__main__":

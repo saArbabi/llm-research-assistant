@@ -45,3 +45,9 @@ def write_pickle(obj, file_path):
     """Write a Python object to a Pickle file."""
     with open(file_path, "wb") as f:
         pickle.dump(obj, f)
+
+
+def write_markdown(content, file_path):
+    """Write text content to a Markdown (.md) file."""
+    with open(file_path, "w", encoding="utf-8") as f:
+        f.write(content)
