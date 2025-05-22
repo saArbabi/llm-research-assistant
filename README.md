@@ -8,11 +8,7 @@ This package helps with research ideation and novelty evaluation by combining LL
 2. **Retrieval + evaluation branch:**  
    This branch searches existing research (currently using abstracts) to check how novel the generated ideas are. It uses semantic similarity (via FAISS) to compare new ideas against academic literature, suggesting experiments for solution validation.
 
-
-
-### Why this structure
-
-LLMs are good at generating new ideas because they’ve been trained on a wide range of human knowledge. They can combine concepts.
+The intuition behind the approach is based on the fact that LLMs are effective at generating new ideas, as they’ve been trained on a wide range of human knowledge and can combine concepts in novel ways.
 By having the LLM generate ideas without being influenced by existing papers, the aim to take advantage of that creative potential. Then, by checking those ideas against real research, we keep things grounded and relevant.
 
 ## Features
