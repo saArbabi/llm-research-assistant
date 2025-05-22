@@ -1,5 +1,4 @@
 ## Features
-
 - **Query Generation**: Automatically formulates relevant search queries from your problem statement.
 - **Literature Retrieval**: Searches and parses abstracts from academic literature related to the topic.
 - **Idea Generation**: Proposes new research ideas.
@@ -9,18 +8,19 @@
   - Novelty 
   - Suggested experiments for validation
 
-## Setup Instructions
+![alt text](solution_diagram.jpg "Title")
+## Setup instructions
 
 
 
-### 1. Create a Virtual Environment
+### 1. Create a virtual environment
 
 Run this in the project directory:
 ```bash
 python -m venv <venv>
 ```
 
-### 3. Activate the Virtual Environment
+### 3. Activate the virtual environment
 
 **On Linux/Mac:**
 ```bash
@@ -32,7 +32,7 @@ source venv/bin/activate
 venv\Scripts\activate
 ```
 
-### 4. Install Dependencies
+### 4. Install dependencies
 
 Install the reuired packages in `requirements.txt`:
 ```bash
