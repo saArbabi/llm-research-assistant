@@ -18,15 +18,6 @@ EMBEDDING_MODEL = "text-embedding-3-small"
 DIMENSION = 1536
 
 
-def load_abstracts(filename="papers.jsonl"):
-    abstracts = []
-    with open(filename, "r", encoding="utf-8") as f:
-        for line in f:
-            data = json.loads(line)
-            abstracts.append(data["abstract"])
-    return abstracts
-
-
 def create_faiss_index(embeddings):
     logger.info("Creating FAISS index")
     index = faiss.IndexFlatL2(DIMENSION)
@@ -60,16 +51,15 @@ def search(query, llm_search_results, top_k=3):
 def mock_search(query, llm_search_results, top_k=3):
     import os
 
-    example_embeddings_path = os.path.join("mock_data", "example_embeddings.pkl")
-    example_query_embedding_path = os.path.join("mock_data", "example_query_embedding.pkl")
+    ex_embeddings_path = os.path.join("mock_data", "ex_embeddings.pkl")
+    ex_query_embedding_path = os.path.join("mock_data", "ex_query_embedding.pkl")
     faiss_index_path = os.path.join("mock_data", "faiss_index.index")
     abstracts = [res["abstract"] for res in llm_search_results]
-    if not os.path.exists(example_embeddings_path):
+    if not os.path.exists(ex_embeddings_path):
         abstract_embeddings = get_embedding(abstracts)
-        write_pickle(abstract_embeddings, example_embeddings_path)
+        write_pickle(abstract_embeddings, ex_embeddings_path)
     else:
-        with open(example_embeddings_path, "rb") as f:
-            abstract_embeddings = load_pickle(example_embeddings_path)
+        abstract_embeddings = load_pickle(ex_embeddings_path)
 
     if not os.path.exists(faiss_index_path):
         faiss_index = create_faiss_index(abstract_embeddings)
@@ -77,11 +67,11 @@ def mock_search(query, llm_search_results, top_k=3):
     else:
         faiss_index = faiss.read_index(faiss_index_path)
 
-    if not os.path.exists(example_query_embedding_path):
+    if not os.path.exists(ex_query_embedding_path):
         query_embedding = get_embedding([query])
-        write_pickle(query_embedding, example_query_embedding_path)
+        write_pickle(query_embedding, ex_query_embedding_path)
     else:
-        query_embedding = load_pickle(example_query_embedding_path)
+        query_embedding = load_pickle(ex_query_embedding_path)
     distances, indices = faiss_index.search(query_embedding[query].reshape(1, -1), top_k)
     results = []
     for i, idx in enumerate(indices[0]):
