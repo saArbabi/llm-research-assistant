@@ -1,4 +1,4 @@
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel
 
 from openai_tools import create_openai_client, parse_llm_response
 
