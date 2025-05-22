@@ -1,9 +1,13 @@
 from pydantic import BaseModel
 
 from openai_tools import create_openai_client, parse_llm_response
+from tasks import MOCK_BEHAVIOR
 
 
 async def generate_search_query(user_description: str, model: str = "gpt-3.5-turbo") -> str:
+
+    if MOCK_BEHAVIOR["generate_search_query"]:
+        return mock_search_query()
 
     system_prompt = """
         You are a helpful assistant that generates search queries for research based on a user description. 
@@ -37,7 +41,7 @@ async def generate_search_query(user_description: str, model: str = "gpt-3.5-tur
     return parse_llm_response(search_query, QueryResponse)
 
 
-async def mock_search_query():
+def mock_search_query():
     # Sample LLM response
     dummy_response_text = """
         {
