@@ -1,1 +1,3 @@
 WIP
+
+My working solution is to chain together multiple LLM calls to: (1) generate relevant search queries based on the problem, (2) retrieve and parse abstracts from relevant academic literature, (3) propose new solutions, (4) perform a similarity search against retrieved literature to assess the novelty of each idea, and (5) generate a structured report summarising the research ideas, their novelty and experiments to validate them.
