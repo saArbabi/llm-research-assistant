@@ -44,11 +44,16 @@ async def generate_search_query(user_description: str, model: str = "gpt-3.5-tur
 def mock_search_query():
     # Sample LLM response
     dummy_response_text = """
-        {
-            "queries": ["latest trends in robotics research", "impact of robotics on industrial automation", "future applications of robotics technology"],
-            "thoughts": "These queries will provide insights into the current advancements, practical implications, and potential future developments in the field of robotics."
-        }
+    {
+    "queries": [
+        "Techniques for improving hand generation in image models",
+        "Neural network architectures for realistic hand generation in images",
+        "Dataset recommendations for training image generation models to generate hands accurately"
+    ],
+    "thoughts": "The suggested search queries are designed to gather information on various approaches such as specific techniques, neural network structures, and suitable datasets that can aid in enhancing the accuracy of hand generation within image models."
+    }
     """
+
     return parse_llm_response(dummy_response_text, QueryResponse)
 
 

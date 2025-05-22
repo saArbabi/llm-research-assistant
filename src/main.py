@@ -1,11 +1,11 @@
 import asyncio
 
-# from coordinator import ResearchCoordinator
 from dotenv import load_dotenv
 from rich.console import Console
 from rich.prompt import Prompt
 
 from agent import Agent
+from tasks import MOCK_BEHAVIOR
 
 load_dotenv()
 
@@ -20,7 +20,13 @@ async def main() -> None:
     )
 
     # get the users query
-    query = Prompt.ask("\n[bold]What would you like to research?[/bold]")
+    if MOCK_BEHAVIOR["user_query"]:
+        query = (
+            "Current image generation models often struggle with accurately generating hands."
+            "How could I go about improving these models to fix this?"
+        )
+    else:
+        query = Prompt.ask("\n[bold]What would you like to research?[/bold]")
 
     if not query.strip():
         console.print("[bold red]Error:[/bold red] Please provide a valid query.")

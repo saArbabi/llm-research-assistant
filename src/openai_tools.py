@@ -7,6 +7,9 @@ from dotenv import load_dotenv
 from loguru import logger
 from openai import OpenAI
 from pydantic import BaseModel, ValidationError
+from rich.console import Console
+
+console = Console()
 
 logger.remove()
 logger.add(
@@ -37,8 +40,11 @@ def check_openai_api_key(client):
 
 def create_openai_client():
     load_dotenv()
-    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-    check_openai_api_key(client)
+
+    with console.status("[bold blue]🤖💭 Thinking... Creating OpenAI client", spinner="dots"):
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        check_openai_api_key(client)
+    console.print("[bold green]🤖 Ready! OpenAI client initialized.")
     return client
 
 

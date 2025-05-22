@@ -1,7 +1,5 @@
 initial_play/
 .env
-*.pkl
-*.index
-*.jsonl
+mock_data
 notebook.ipynb
 __pycache__
