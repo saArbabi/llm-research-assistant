@@ -1,3 +1,64 @@
-WIP
+# 🧠 LLM Research Idea Generator
 
-My working solution is to chain together multiple LLM calls to: (1) generate relevant search queries based on the problem, (2) retrieve and parse abstracts from relevant academic literature, (3) propose new solutions, (4) perform a similarity search against retrieved literature to assess the novelty of each idea, and (5) generate a structured report summarising the research ideas, their novelty and experiments to validate them.
+This is a pipeline that chains together a bunch of LLM calls to help generate and assess new research ideas. It's basically a thinking assistant that does the grunt work of literature review and idea vetting. Here's how it works:
+
+## Features
+
+- **Query Generation**: Automatically formulates relevant search queries from your problem statement.
+- **Literature Retrieval**: Searches and parses abstracts from academic literature related to the topic.
+- **Idea Generation**: Proposes new research ideas.
+- **Novelty Assessment**: Compares generated ideas against retrieved literature to assess originality using similarity search with Faiss (Facebook AI Similarity Search) .
+- **Report Generation**: Produces a structured summary report that includes:
+  - Proposed research ideas
+  - Novelty 
+  - Suggested experiments for validation
+
+## Setup Instructions
+
+
+
+### 1. Create a Virtual Environment
+
+Run this in the project directory:
+```bash
+python -m venv <venv>
+```
+
+### 3. Activate the Virtual Environment
+
+**On Linux/Mac:**
+```bash
+source venv/bin/activate
+```
+
+**On Windows:**
+```bash
+venv\Scripts\activate
+```
+
+### 4. Install Dependencies
+
+Install the reuired packages in `requirements.txt`:
+```bash
+pip install -r requirements.txt
+```
+### 5. Set API key as an environment variable
+Create a `.env` file in the root directory with your API key secrets:
+```
+OPENAI_API_KEY=your-api-key-here
+```
+See [Open AI](https://platform.openai.com/api-keys) for how to create keys.
+
+## Usage
+
+Run the assistant:
+```bash
+python src/main.py
+```
+
+You'll be prompted to enter a technical problem description. Example:
+```
+Current image generation models often struggle with accurately generating hands. How could I go about improving these models to fix this?
+```
+
+The assistant will respond with relevant research directions, novelty checks, and experiment suggestions.
