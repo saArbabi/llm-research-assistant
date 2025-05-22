@@ -1,6 +1,6 @@
 ## Overview of the approach
 
-This package uses a two-branch setup to support research ideation and novelty evaluation by combining large language models (LLMs) with retrieval tools.
+This package helps with research ideation and novelty evaluation by combining LLMs with retrieval (see schematic below).
 
 1. **Generative branch:**  
    This branch starts by generating research ideas based only on the user’s description of a problem. It doesn't reference existing literature to encourage more original solutions. These ideas are then passed to the next branch for evaluation.
