@@ -5,7 +5,8 @@ import faiss
 import numpy as np
 from loguru import logger
 
-from src.openai_tools import get_embedding
+from openai_tools import get_embedding
+from tasks import MOCK_BEHAVIOR
 
 logger.remove()
 logger.add(
@@ -25,40 +26,67 @@ def load_abstracts(filename="papers.jsonl"):
     return abstracts
 
 
-def build_and_save_index(embeddings, index_path="faiss.index", metadata_path="metadata.pkl"):
+def create_faiss_index(embeddings):
     logger.info("Creating FAISS index")
     index = faiss.IndexFlatL2(DIMENSION)
     index.add(np.array(list(embeddings.values())).astype("float32"))
 
     logger.success("FAISS index created")
-    faiss.write_index(index, index_path)
-
-    with open(metadata_path, "wb") as f:
-        pickle.dump(embeddings, f)
-    logger.success("FAISS index and metadata saved successfully")
+    return index
 
 
-def get_query_embedding(query):
-    embedding = get_embedding([query])
-    return embedding[query]
+def search(query, llm_search_results, top_k=3):
+    if MOCK_BEHAVIOR["search"]:
+        return mock_search(query, llm_search_results, top_k)
 
 
-def search(query, index_path="faiss.index", metadata_path="metadata.pkl", top_k=3):
-    index = faiss.read_index(index_path)
+#     # get embedding for the literature abstract
+#     abstracts = [res["abstract"] for res in llm_search_results]
+#     abstract_embeddings = get_embedding(abstracts)
+#     # get embedding for the llm_idea
+#     query_embedding = get_embedding([query])
+#     # create faiss index
+#     faiss_index = create_faiss_index(abstract_embeddings)
 
-    with open(metadata_path, "rb") as f:
-        embedding_cache = list(pickle.load(f).keys())
+# distances, indices = faiss_index.search(query_embedding, top_k)
 
-    query_vec = get_query_embedding(query).reshape(1, -1)
+# for i, idx in enumerate(indices[0]):
+#     print(f"Match {i+1}:")
+#     print(f"Abstract: {abstract_embeddings[idx][:50]} ...")
+#     print(f"Distance: {distances[0][i]:.4f}\n")
 
-    distances, indices = index.search(query_vec, top_k)
+
+def mock_search(query, llm_search_results, top_k=3):
+    import os
+
+    example_embeddings_path = os.path.join("data", "example_embeddings.pkl")
+    example_query_embedding_path = os.path.join("data", "example_query_embedding.pkl")
+    faiss_index_path = os.path.join("data", "faiss_index.index")
+    abstracts = [res["abstract"] for res in llm_search_results]
+    if not os.path.exists(example_embeddings_path):
+        abstract_embeddings = get_embedding(abstracts)
+        with open(example_embeddings_path, "wb") as f:
+            pickle.dump(abstract_embeddings, f)
+    else:
+        with open(example_embeddings_path, "rb") as f:
+            abstract_embeddings = pickle.load(f)
+
+    if not os.path.exists(faiss_index_path):
+        faiss_index = create_faiss_index(abstract_embeddings)
+        faiss.write_index(faiss_index, faiss_index_path)
+    else:
+        faiss_index = faiss.read_index(faiss_index_path)
+
+    if not os.path.exists(example_query_embedding_path):
+        query_embedding = get_embedding([query])
+        with open(example_query_embedding_path, "wb") as f:
+            pickle.dump(query_embedding, f)
+    else:
+        with open(example_query_embedding_path, "rb") as f:
+            query_embedding = pickle.load(f)
+    distances, indices = faiss_index.search(query_embedding[query].reshape(1, -1), top_k)
 
     for i, idx in enumerate(indices[0]):
         print(f"Match {i+1}:")
-        print(f"Abstract: {embedding_cache[idx][:50]} ...")
+        print(f"Abstract: {abstracts[idx][:50]} ...")
         print(f"Distance: {distances[0][i]:.4f}\n")
-
-
-if __name__ == "__main__":
-    user_query = input("Enter your query: ")
-    search(user_query)

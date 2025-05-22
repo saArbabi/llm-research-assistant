@@ -47,8 +47,8 @@ def get_embedding(abstracts, model="text-embedding-3-small"):
 
     embeddings = {}
     for abstract in abstracts:
-        if len(abstract) > 20:
-            logger.info(f"Generating embeddings for '{abstract[:20]} ...'")
+        if len(abstract) > 50:
+            logger.info(f"Generating embeddings for '{abstract[:50]} ...'")
         else:
             logger.info(f"Generating embeddings for {abstract}")
         response = client.embeddings.create(input=abstract, model=model)

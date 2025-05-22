@@ -4,8 +4,7 @@ from rich.panel import Panel
 
 from tasks.generate_query import QueryResponse, generate_search_query
 from tasks.literature_search import perform_literature_search
-
-# from tasks.similarity_search import get_query_embedding, search
+from tasks.similarity_search import search
 
 logger.remove()
 logger.add(
@@ -21,7 +20,8 @@ class Agent:
 
     async def run(self) -> str:
         query_response = await self.generate_queries()
-        await self.perform_literature_search(query_response.queries)
+        search_results = await self.perform_literature_search(query_response.queries)
+        await self.perform_similarity_search(search_results)
 
         return query_response
 
@@ -48,18 +48,12 @@ class Agent:
 
         return search_results
 
-    # async def perform_similarity_search(
-    #     self, llm_search_results: list[str], llm_ideas: list[str] = [], top_k=5
-    # ) -> None:
-    #     """Compares every llm generated idea with the searched literature.
-    #     Returns a list of closest abstract matches.
-    #     """
-    #     llm_ideas = llm_search_results[:3]
-    #     for llm_idea in llm_ideas:
-
-    #         # get embedding for the literature abstract
-    #         # get embedding for the llm_idea
-    #         # build index
-    #         # return top results
-    #         search(llm_idea["abstract"], index_path="faiss.index", metadata_path="metadata.pkl", top_k=3):
-    #         search(llm_idea["abstract"], llm_search_results, top_k=3):
+    async def perform_similarity_search(
+        self, llm_search_results: list[str], llm_ideas: list[str] = [], top_k=5
+    ) -> None:
+        """Compares every llm generated idea with the searched literature.
+        Returns a list of closest abstract matches.
+        """
+        llm_ideas = llm_search_results[:3]
+        # for llm_idea in llm_ideas:
+        search(llm_ideas[0]["abstract"], llm_search_results, top_k=10)

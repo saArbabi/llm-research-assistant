@@ -25,18 +25,7 @@ def search_semantic_scholar(query, limit=10):
     return papers
 
 
-def perform_literature_search(queries):
-    if MOCK_BEHAVIOR["perform_literature_search"]:
-        return mock_literature_search()
-
-    raw_search_results = []
-    search_results = []
-    for query in queries:
-        try:
-            console.print(f"\n[bold cyan]Searching for:[/bold cyan] {query}")
-            search_results.extend(search_semantic_scholar(query))
-        except Exception as ex:
-            console.print(f"[bold red]Search error for query '{query}':[/bold red] {str(ex)}")
+def remove_missing_abstracts(raw_search_results):
     search_results = []
     for res in raw_search_results:
         if not res["abstract"]:
@@ -45,8 +34,23 @@ def perform_literature_search(queries):
     return search_results
 
 
+def perform_literature_search(queries):
+    if MOCK_BEHAVIOR["perform_literature_search"]:
+        return mock_literature_search()
+
+    search_results = []
+    for query in queries:
+        try:
+            console.print(f"\n[bold cyan]Searching for:[/bold cyan] {query}")
+            search_results.extend(search_semantic_scholar(query))
+        except Exception as ex:
+            console.print(f"[bold red]Search error for query '{query}':[/bold red] {str(ex)}")
+
+    return remove_missing_abstracts(search_results)
+
+
 def mock_literature_search():
-    return load_jsonl("data/testing_search.jsonl")
+    return remove_missing_abstracts(load_jsonl("data/testing_search.jsonl"))
 
 
 def save_papers_to_jsonl(papers, filename="papers.jsonl"):
