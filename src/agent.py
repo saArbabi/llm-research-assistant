@@ -2,6 +2,7 @@ from loguru import logger
 from rich.console import Console
 from rich.panel import Panel
 
+from tasks.generate_ideas import LLMSolutionResponse, generate_search_ideas
 from tasks.generate_query import QueryResponse, generate_search_query
 from tasks.literature_search import perform_literature_search
 from tasks.similarity_search import search
@@ -22,6 +23,7 @@ class Agent:
         query_response = await self.generate_queries()
         search_results = await self.perform_literature_search(query_response.queries)
         await self.perform_similarity_search(search_results)
+        await self.generate_solutions()
 
         return query_response
 
@@ -57,3 +59,10 @@ class Agent:
         llm_ideas = llm_search_results[:3]
         # for llm_idea in llm_ideas:
         search(llm_ideas[0]["abstract"], llm_search_results, top_k=10)
+
+    async def generate_solutions(self) -> LLMSolutionResponse:
+        result = await generate_search_ideas(self.query)
+        # Display the results
+        console.print(Panel("[bold cyan]Solution Generation[/bold cyan]"))
+        console.print(f"[yellow]Proposed solution:[/yellow] {result.idea}")
+        console.print(f"[yellow]Abstract:[/yellow] {result.abstract}")
