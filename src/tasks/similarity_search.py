@@ -31,21 +31,19 @@ def search(query, llm_search_results, top_k=3):
     if MOCK_BEHAVIOR["search"]:
         return mock_search(query, llm_search_results, top_k)
 
-
-#     # get embedding for the literature abstract
-#     abstracts = [res["abstract"] for res in llm_search_results]
-#     abstract_embeddings = get_embedding(abstracts)
-#     # get embedding for the llm_idea
-#     query_embedding = get_embedding([query])
-#     # create faiss index
-#     faiss_index = create_faiss_index(abstract_embeddings)
-
-# distances, indices = faiss_index.search(query_embedding, top_k)
-
-# for i, idx in enumerate(indices[0]):
-#     print(f"Match {i+1}:")
-#     print(f"Abstract: {abstract_embeddings[idx][:50]} ...")
-#     print(f"Distance: {distances[0][i]:.4f}\n")
+    abstracts = [res["abstract"] for res in llm_search_results]
+    abstract_embeddings = get_embedding(abstracts)
+    faiss_index = create_faiss_index(abstract_embeddings)
+    query_embedding = get_embedding([query])
+    distances, indices = faiss_index.search(query_embedding[query].reshape(1, -1), top_k)
+    results = []
+    for i, idx in enumerate(indices[0]):
+        title = f"{llm_search_results[idx]['title']}"
+        abstract = f"{llm_search_results[idx]['abstract']}"
+        link = f"{llm_search_results[idx]['url']}"
+        distance = f"{distances[0][i]:.4f}"
+        results.append(SimilarityResult(title, abstract, link, distance))
+    return results
 
 
 def mock_search(query, llm_search_results, top_k=3):
