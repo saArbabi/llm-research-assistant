@@ -1,8 +1,25 @@
+## Overview of the approach
+
+This package uses a two-branch setup to support research ideation and novelty evaluation by combining large language models (LLMs) with retrieval tools.
+
+1. **Generative branch:**  
+   This branch starts by generating research ideas based only on the user’s description of a problem. It doesn't reference existing literature to encourage more original solutions. These ideas are then passed to the next branch for evaluation.
+
+2. **Retrieval + evaluation branch:**  
+   This branch searches existing research (currently using abstracts) to check how novel the generated ideas are. It uses semantic similarity (via FAISS) to compare new ideas against academic literature, suggesting experiments for solution validation.
+
+
+
+### Why this structure
+
+LLMs are good at generating new ideas because they’ve been trained on a wide range of human knowledge. They can combine concepts.
+By having the LLM generate ideas without being influenced by existing papers, the aim to take advantage of that creative potential. Then, by checking those ideas against real research, we keep things grounded and relevant.
+
 ## Features
 - **Query Generation**: Automatically formulates relevant search queries from your problem statement.
 - **Literature Retrieval**: Searches and parses abstracts from academic literature related to the topic.
 - **Idea Generation**: Proposes new research ideas.
-- **Novelty Assessment**: Compares generated ideas against retrieved literature to assess originality using similarity search with Faiss (Facebook AI Similarity Search) .
+- **Novelty Assessment**: Compares generated ideas against retrieved literature to assess originality using similarity search.
 - **Report Generation**: Produces a structured summary report that includes:
   - Proposed research ideas
   - Novelty 
